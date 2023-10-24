@@ -3,7 +3,7 @@ import React from "react";
 
 const SettingsScreen = () => {
   return (
-    <View>
+    <View style={{flex: 1, backgroundColor: 'blue'}}>
       <Text>SettingsScreen</Text>
     </View>
   );
