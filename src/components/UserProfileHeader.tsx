@@ -1,15 +1,6 @@
-import {
-  Image,
-
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-
-} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { User } from "../shared/interfaces";
-
 
 interface Props {
   user: User;
@@ -18,15 +9,13 @@ interface Props {
 const UserProfileHeader = (props: Props) => {
   const { user } = props;
   return (
-
-      <View style={styles.container} >
-        <TouchableOpacity style={styles.avatarContainer}>
-          <Image source={{ uri: user.avatar }} style={styles.avatar} />
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.avatarContainer}>
+        <Image source={{ uri: user.avatar }} style={styles.avatar} />
+      </TouchableOpacity>
       <Text style={styles.username}>{user.name}</Text>
       <Text style={styles.username}>@{user.username}</Text>
-      </View>
-
+    </View>
   );
 };
 
@@ -48,7 +37,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "blue",
     marginBottom: 10,
-    marginLeft: 15,
     // bottom: -50,
   },
   avatar: {

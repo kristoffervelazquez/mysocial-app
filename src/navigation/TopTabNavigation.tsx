@@ -1,5 +1,4 @@
 import React from "react";
-import SettingsScreen from "../screens/SettingsScreen";
 import { View, StyleSheet } from "react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 import GalleryTab from "../screens/tabScreens/GalleryTab";
