@@ -6,14 +6,15 @@ import UserProfileHeader from "../components/UserProfileHeader";
 import { User } from "../shared/interfaces";
 import SocialsTab from "../screens/tabScreens/SocialsTab";
 import AboutMeTab from "../screens/tabScreens/AboutMeTab";
-
+import { SafeAreaView } from "react-native";
 
 const TopTabNavigation = () => {
   const user: User = {
     id: 1234567890,
     name: "Kristoffer Velazquez",
     username: "krissking",
-    avatar: "https://avatars.githubusercontent.com/u/55765715?v=4",
+    avatar:
+      "https://res.cloudinary.com/dq473i7j4/image/upload/v1697489618/mysocial/nyo7hxn0of595hqxkybg.jpg",
     banner: "https://picsum.photos/2000/200",
   };
 
@@ -26,9 +27,9 @@ const TopTabNavigation = () => {
           </Tabs.ScrollView>
         </Tabs.Tab>
         <Tabs.Tab name="Socials">
-          <Tabs.ScrollView>
+          <SafeAreaView style={styles.container}>
             <SocialsTab />
-          </Tabs.ScrollView>
+          </SafeAreaView>
         </Tabs.Tab>
         <Tabs.Tab name="About me">
           <Tabs.ScrollView>
