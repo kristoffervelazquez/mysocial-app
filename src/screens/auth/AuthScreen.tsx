@@ -42,7 +42,7 @@ const LoginScreen = () => {
           <View style={{ flexDirection: "row" }}>
             <Text style={styles.description}>Forgot your password? </Text>
             <TouchableOpacity>
-              <Text style={[styles.description, { color: "#3071E7" }]}>
+              <Text style={[styles.description, { color: "#0363FD" }]}>
                 Click here
               </Text>
             </TouchableOpacity>
@@ -53,7 +53,7 @@ const LoginScreen = () => {
               <Text style={styles.buttonText}>Sign up</Text>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text style={[styles.description, { color: "#3071E7" }]}>
+              <Text style={[styles.description, { color: "#0363FD" }]}>
                 Create account
               </Text>
 
@@ -68,7 +68,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#3071E7",
+    backgroundColor: "#0363FD",
   },
   animatedContainer: {
     flex: 1,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     height: 50,
-    backgroundColor: "#3071E7",
+    backgroundColor: "#0363FD",
     borderRadius: 10,
     marginBottom: 0,
     paddingHorizontal: 10,
