@@ -1,12 +1,13 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import LottieView from "lottie-react-native";
 
 const HeaderAnimation = () => {
   return (
     <View style={styles.container}>
+      {/* <Text>HeaderAnimation</Text> */}
       <LottieView
-        source={require("../../../../assets/people.json")} // Ruta al archivo JSON de la animación
+        source={require("../../../../assets/networking.json")} // Ruta al archivo JSON de la animación
         autoPlay={true} // Iniciar animación automáticamente
         loop={true}
         speed={0.5}
