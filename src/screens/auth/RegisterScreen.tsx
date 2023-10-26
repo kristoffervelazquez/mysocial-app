@@ -8,15 +8,9 @@ import {
   Platform,
   TouchableOpacity,
 } from "react-native";
-import HeaderAnimation from "./components/HeaderAnimation";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import HeaderRegisterAnimation from "./components/HeaderRegisterAnimation";
 
-const LoginScreen = () => {
-  const navigation = useNavigation();
-  const handlePressRegister = () => {
-    const pushAction = StackActions.push("RegisterScreen");
-    navigation.dispatch(pushAction);
-  };
+const RegisterScreen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -24,48 +18,51 @@ const LoginScreen = () => {
       enabled
     >
       <View style={styles.animatedContainer}>
-        <HeaderAnimation />
+        <HeaderRegisterAnimation />
       </View>
       <View style={styles.box}>
         {/* Login Form */}
-        <Text style={styles.title}>Welcome to mySocial!</Text>
+        <Text style={styles.title}>Create your account!</Text>
         <Text style={styles.description}>
-          Please sign up to start using the app.
+          Please fill the form to create your account.
         </Text>
+        {/* FORM */}
         <View style={styles.formContainer}>
+          {/* INPUTS */}
+          <View style={styles.inputContaier}>
+            <TextInput
+              style={styles.input}
+              placeholder="Name"
+              textContentType="name"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Last name"
+              textContentType="familyName"
+            />
+          </View>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { width: "98%" }]}
+            placeholder="Username"
+            textContentType="username"
+          />
+          <TextInput
+            style={[styles.input, { width: "98%" }]}
             placeholder="Email"
             textContentType="emailAddress"
             keyboardType="email-address"
           />
           <TextInput
-            style={styles.input}
+            style={[styles.input, { width: "98%" }]}
             placeholder="Password"
             textContentType="password"
             secureTextEntry
           />
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.description}>Forgot your password? </Text>
-            <TouchableOpacity>
-              <Text style={[styles.description, { color: "#0363FD" }]}>
-                Click here
-              </Text>
-            </TouchableOpacity>
-          </View>
 
-          <View style={{ backgroundColor: "transparent", width: "100%" }}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Sign up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handlePressRegister}
-            >
-              <Text style={[styles.description, { color: "#0363FD" }]}>
-                Create account
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {/*  BUTTONS */}
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Create account</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -97,7 +94,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
   },
   input: {
-    width: "100%",
+    width: "48%",
     height: 50,
     backgroundColor: "transparent",
     borderRadius: 10,
@@ -105,6 +102,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
     textAlign: "center",
+  },
+  inputContaier: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   title: {
     fontSize: 32,
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 30,
   },
   buttonText: {
     color: "white",
@@ -139,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;
