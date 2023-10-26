@@ -1,7 +1,7 @@
 import React from "react";
 import TopTabNavigation from "./TopTabNavigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Button, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import {
   NavigationProp,
   StackActions,
@@ -16,7 +16,7 @@ interface ButtonProps {
   navigation: NavigationProp<any>;
 }
 
-const Navigation = () => {
+const AppStack = () => {
   const Stack = createNativeStackNavigator();
   const navigation = useNavigation();
 
@@ -33,11 +33,21 @@ const Navigation = () => {
         }}
       />
       <Stack.Screen name="Settings" component={SettingsScreen} />
-      <Stack.Screen name="QrGenerationScreen" options={{headerTitle: 'Generate QR'}} component={QrGenerationScreen} />
-      <Stack.Screen name="QrScreen" options={{headerTitle: 'Share your QR!'}} component={QrScreen}  />
+      <Stack.Screen
+        name="QrGenerationScreen"
+        options={{ headerTitle: "Generate QR" }}
+        component={QrGenerationScreen}
+      />
+      <Stack.Screen
+        name="QrScreen"
+        options={{ headerTitle: "Share your QR!" }}
+        component={QrScreen}
+      />
     </Stack.Navigator>
   );
 };
+
+export default AppStack;
 
 const QrButton = ({ navigation }: ButtonProps) => {
   const pushAction = StackActions.push("QrGenerationScreen");
@@ -56,5 +66,3 @@ const SettingsButton = ({ navigation }: ButtonProps) => {
     </TouchableOpacity>
   );
 };
-
-export default Navigation;

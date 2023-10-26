@@ -3,7 +3,6 @@ import {
   Text,
   View,
   Switch,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import React from "react";
@@ -33,8 +32,14 @@ const QrGenerationScreen = () => {
           justifyContent: "space-evenly",
         }}
       >
-        <Text style={{ fontWeight: "bold", width: 30 }}>All</Text>
-        {/* <Icon name="checkmark-done-sharp" size={30} color="green" /> */}
+        {/* <Text style={{ fontWeight: "bold", width: 30 }}>All</Text> */}
+        {
+          isEnabled ?
+          <Icon name="lock-open-outline" size={30} color="green" />
+          :
+          <Icon name="lock-closed-outline" size={30} color="red" />
+
+        }
         <Switch onChange={toggleSwitch} value={isEnabled} />
       </View>
       <View style={{ height: 20 }} />
@@ -78,7 +83,7 @@ const QrGenerationScreen = () => {
       </View>
 
       <TouchableOpacity style={styles.qrContainer} onPress={() => generateQR()}>
-        <Text style={styles.qrText}>Generate Qr</Text>
+        <Text style={styles.qrText}>Generate QR</Text>
       </TouchableOpacity>
     </View>
   );

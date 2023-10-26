@@ -58,7 +58,9 @@ export default ImageGallery;
 
 const styles = StyleSheet.create({
   imageContainer: {
-    width: "33%",
+    width: "33.2%",
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
   },
   image: {
     aspectRatio: 1,
