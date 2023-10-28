@@ -101,7 +101,7 @@ const TopTabNavigation = () => {
           </SafeAreaView>
         </Tabs.Tab>
         <Tabs.Tab name="About me">
-          <Tabs.ScrollView>
+          <Tabs.ScrollView style={styles.container}>
             <AboutMeTab about={user.about} />
           </Tabs.ScrollView>
         </Tabs.Tab>

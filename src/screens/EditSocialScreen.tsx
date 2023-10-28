@@ -1,39 +1,82 @@
-import { Alert, Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Button,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Social } from "../shared/interfaces";
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import SocialIcon from "../components/SocialIcon";
 
-
-
 type Props = NativeStackScreenProps<any, "EditSocialScreen">;
 
 const EditSocialScreen = ({ navigation, route }: Props) => {
-  const social: Social = (route.params as { social: Social })?.social;
-  const [selectedSocial, setSelectedSocial] = useState(social.type._id);
-  const [url, setUrl] = useState(social.url);
-  const [description, setDescription] = useState(social.description);
+  const social: Social | null = (route.params as { social: Social })?.social;
+
+  const [selectedSocial, setSelectedSocial] = useState(
+    social?.type._id || "64f99738f21565f0a5f67a0c"
+  );
+  const [url, setUrl] = useState(social?.url || "");
+  const [description, setDescription] = useState(social?.description || "");
   useEffect(() => {
     navigation.setOptions({
-      title: social.type.name,
+      title: social?.type.name || "Add new Social",
       headerTitleAlign: "center",
     } as any);
   }, []);
 
   const handleSave = () => {
-    if (!url.trim() || !description.trim())
+    if (!url.trim() || !description.trim()) {
       return Alert.alert("Please fill all the fields");
-    Alert.alert("Open");
+    }
+
+    if (social) {
+      // Editar
+      // ...
+    } else {
+      // Crear
+      // ...
+    }
+    Alert.alert("Saved!");
+    navigation.goBack();
   };
-  
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Delete Social",
+      "This action cannot be undone. Are you sure you want to delete this social network?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"), // Do nothing
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Text style={styles.title}>
         {data.find((item) => item._id === selectedSocial)?.name}
       </Text>
-      <SocialIcon name={data.find((item) => item._id === selectedSocial)?.name as string} size={40} style={{alignSelf: 'center'}}/>
+      <SocialIcon
+        name={data.find((item) => item._id === selectedSocial)?.name as string}
+        size={40}
+        style={{ alignSelf: "center" }}
+      />
 
       <View style={styles.formContainer}>
         <View>
@@ -69,11 +112,22 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
             onValueChange={(itemValue) => setSelectedSocial(itemValue)}
           >
             {data.map((item) => {
-              return <Picker.Item label={item.name} value={item._id} />;
+              return (
+                <Picker.Item
+                  key={item._id}
+                  label={item.name}
+                  value={item._id}
+                />
+              );
             })}
           </Picker>
         </View>
-        <Button title="Savex" onPress={handleSave} />
+        <View style={styles.inputContaier}>
+          {social && (
+            <Button title="Delete" onPress={handleDelete} color={"red"} />
+          )}
+          <Button title="Save" onPress={handleSave} />
+        </View>
       </View>
     </KeyboardAvoidingView>
   );

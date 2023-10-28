@@ -4,14 +4,15 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 interface Props {
   onPress: () => void;
+  icon?: string;
 }
 
-const MyFAB = ({ onPress }: Props) => {
+const MyFAB = ({ onPress, icon = 'add-outline' }: Props) => {
   
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.fab} onPress={onPress}>
-        <Icon name='add-outline' size={30} color="white" />
+        <Icon name={icon} size={30} color="white" />
       </TouchableOpacity>
     </View>
   );
