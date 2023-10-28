@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "mysocial-app",
-    "slug": "mysocial-app",
+    "slug": "mysocial",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f6c1e218-79bc-4bef-a5a3-dd9b0f544913"
+      }
+    },
+    "owner": "kristoffervelazquez"
   }
 }

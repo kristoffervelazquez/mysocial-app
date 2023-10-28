@@ -1,5 +1,4 @@
 import React from "react";
-import TopTabNavigation from "./TopTabNavigation";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { TouchableOpacity, View } from "react-native";
 import {
@@ -15,6 +14,7 @@ import QrScreen from "../screens/QrScreen";
 import QrScannerScreen from "../screens/QrScannerScreen";
 import HomeScreen from "../screens/HomeScreen";
 import PublicProfileScreen from "../screens/PublicProfileScreen";
+import EditSocialScreen from "../screens/EditSocialScreen";
 
 interface ButtonProps {
   navigation: NavigationProp<any>;
@@ -27,7 +27,7 @@ const AppStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: true }}>
       <Stack.Screen
-        name="Profile"
+        name="HomeScreen"
         component={HomeScreen}
         options={{
           headerRight: () => <QrButton navigation={navigation} />,
@@ -40,11 +40,11 @@ const AppStack = () => {
         name="PublicProfileScreen"
         component={PublicProfileScreen}
         options={{
-          headerTitle: "Public Profile",
           headerTitleAlign: "center",
         }}
       />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="EditSocialScreen" component={EditSocialScreen} />
+      <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       <Stack.Screen
         name="QrScanner"
         options={{ headerTitle: "Read QR" }}
@@ -89,7 +89,7 @@ const QrButton = ({ navigation }: ButtonProps) => {
 };
 
 const SettingsButton = ({ navigation }: ButtonProps) => {
-  const pushAction = StackActions.push("Settings");
+  const pushAction = StackActions.push("SettingsScreen");
   return (
     <TouchableOpacity onPress={() => navigation.dispatch(pushAction)}>
       <Icon name="settings-outline" size={30} color={"blue"} />

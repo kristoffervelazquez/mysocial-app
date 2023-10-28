@@ -4,6 +4,8 @@ import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
 import { askUserForPermissions } from "../helpers/askUserForPermissions";
 import { StackActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import * as Haptics from "expo-haptics";
+import { showNotification } from "../helpers/showNotification";
 
 type ScreenProps = NativeStackScreenProps<any, "QrScanner">;
 const QRScanner = ({ navigation }: ScreenProps) => {
@@ -20,11 +22,15 @@ const QRScanner = ({ navigation }: ScreenProps) => {
     })();
   }, []);
 
-  const handleBarCodeScanned = (data: BarCodeEvent) => {
+  const handleBarCodeScanned = async (scanData: BarCodeEvent) => {
     setScanned(true);
-    alert(
-      `Bar code with type ${data.type} and data ${data.data} has been scanned!`
-    );
+    const { data } = scanData;
+    const pushAction = StackActions.replace("PublicProfileScreen", {
+      link: data,
+    });
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+    // await showNotification({ title: "Qr scanned", body: data });
+    navigation.dispatch(pushAction);
   };
 
   const handlePress = () => {

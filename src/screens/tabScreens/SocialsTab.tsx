@@ -1,11 +1,16 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import SocialsFlatList from "../../components/SocialsFlatList";
+import { User } from "../../shared/interfaces";
 
-const SocialsTab = () => {
+interface Props {
+  user: User
+}
+
+const SocialsTab = ({user}: Props) => {
   return (
     <View style={{flex: 1}}>
-      <SocialsFlatList data={data} />
+      <SocialsFlatList data={user.socials} />
     </View>
   );
 };

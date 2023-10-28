@@ -63,9 +63,9 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
   },
   image: {
-    aspectRatio: 1,
-    paddingTop: "100%",
-    // width: "100%",
-    // height: 300,
+    // aspectRatio: 1,
+    // paddingTop: "100%",
+    width: "100%",
+    height: 300,
   },
 });

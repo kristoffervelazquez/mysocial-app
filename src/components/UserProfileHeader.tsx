@@ -10,17 +10,17 @@ interface Props {
 
 const UserProfileHeader = (props: Props) => {
   const [visible, setIsVisible] = React.useState(false);
-  const { user } = props;
+  const { avatar, username, name, lastName } = props.user;
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.avatarContainer} onPress={() => setIsVisible(true)}>
-        <Image source={{ uri: user.avatar }} style={styles.avatar} />
+        <Image source={{ uri: avatar }} style={styles.avatar} />
       </TouchableOpacity>
-      <Text style={styles.username}>{user.name}</Text>
-      <Text style={styles.username}>@{user.username}</Text>
+      <Text style={styles.username}>{name} {lastName}</Text>
+      <Text style={styles.username}>@{username}</Text>
       <View>
         <ImageView
-          images={[{ uri: user.avatar }]}
+          images={[{ uri: avatar }]}
           imageIndex={0}
           visible={visible}
           onRequestClose={() => setIsVisible(false)}
