@@ -1,65 +1,18 @@
-import * as React from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
-import * as Haptics from 'expo-haptics';
+import * as React from "react";
+import { StyleSheet, View } from "react-native";
+import MyLoader from "../components/MyLoader";
 
 export default function App() {
+  const [visible, setVisible] = React.useState(true);
+  React.useEffect(() => {
+    setTimeout(() => {
+      setVisible(!visible);
+    }, 3000);
+  }, []);
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Haptics.selectionAsync</Text>
-      <View style={styles.buttonContainer}>
-        <Button title="Selection" onPress={() => Haptics.selectionAsync()} />
-      </View>
-      <Text style={styles.text}>Haptics.notificationAsync</Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Success"
-          onPress={
-            () =>
-              Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success
-              )
-          }
-        />
-        <Button
-          title="Error"
-          onPress={
-            () =>
-              Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Error
-              )
-          }
-        />
-        <Button
-          title="Warning"
-          onPress={
-            () =>
-              Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Warning
-              )
-          }
-        />
-      </View>
-      <Text style={styles.text}>Haptics.impactAsync</Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Light"
-          onPress={
-            () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-          }
-        />
-        <Button
-          title="Medium"
-          onPress={
-            () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-          }
-        />
-        <Button
-          title="Heavy"
-          onPress={
-            () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-          }
-        />
-      </View>
+      <MyLoader visible={visible} />
     </View>
   );
 }
@@ -67,18 +20,18 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 16,
+    justifyContent: "center",
+    // paddingHorizontal: 16,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
+    flexDirection: "row",
+    alignItems: "stretch",
     marginTop: 10,
     marginBottom: 30,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   text: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 8,
   },
 });

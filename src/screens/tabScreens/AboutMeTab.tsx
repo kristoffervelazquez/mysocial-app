@@ -1,6 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { useRoute } from "@react-navigation/native";
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import MyFAB from "../../components/MyFab";
 
 interface Props {
@@ -9,7 +13,15 @@ interface Props {
 
 const AboutMeTab = ({ about }: Props) => {
   const route = useRoute();
+  const naigation = useNavigation();
   const isPublicProfile = route.name === "PublicProfileScreen";
+
+  const handlePress = () => {
+    const pushAction = StackActions.push("EditAboutMeScreen", {
+      about: about || "",
+    });
+    naigation.dispatch(pushAction);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>About me</Text>
@@ -20,9 +32,7 @@ const AboutMeTab = ({ about }: Props) => {
         <View style={{ position: "absolute", top: 10, right: 10 }}>
           <MyFAB
             icon="brush-outline"
-            onPress={() => {
-              console.log("Edit about me");
-            }}
+            onPress={handlePress}
           />
         </View>
       )}

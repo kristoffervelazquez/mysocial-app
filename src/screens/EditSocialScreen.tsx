@@ -7,11 +7,12 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Social } from "../shared/interfaces";
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import SocialIcon from "../components/SocialIcon";
+import MyLoader from "../components/MyLoader";
 
 type Props = NativeStackScreenProps<any, "EditSocialScreen">;
 
@@ -23,6 +24,7 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
   );
   const [url, setUrl] = useState(social?.url || "");
   const [description, setDescription] = useState(social?.description || "");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     navigation.setOptions({
       title: social?.type.name || "Add new Social",
@@ -42,8 +44,13 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
       // Crear
       // ...
     }
-    Alert.alert("Saved!");
-    navigation.goBack();
+    setLoading(true);
+
+    setTimeout(() => {
+      Alert.alert("Saved!");
+      navigation.goBack();
+      setLoading(false);
+    },3000);
   };
 
   const handleDelete = () => {
@@ -129,6 +136,7 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
           <Button title="Save" onPress={handleSave} />
         </View>
       </View>
+      <MyLoader visible={loading} />
     </KeyboardAvoidingView>
   );
 };

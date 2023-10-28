@@ -15,6 +15,7 @@ import QrScannerScreen from "../screens/QrScannerScreen";
 import HomeScreen from "../screens/HomeScreen";
 import PublicProfileScreen from "../screens/PublicProfileScreen";
 import EditSocialScreen from "../screens/EditSocialScreen";
+import EditAboutMeScreen from "../screens/EditAboutMeScreen";
 
 interface ButtonProps {
   navigation: NavigationProp<any>;
@@ -59,6 +60,11 @@ const AppStack = () => {
         name="QrScreen"
         options={{ headerTitle: "Share your QR!" }}
         component={QrScreen}
+      />
+      <Stack.Screen
+        name="EditAboutMeScreen"
+        options={{ headerTitle: "Edit About Me" }}
+        component={EditAboutMeScreen}
       />
     </Stack.Navigator>
   );
