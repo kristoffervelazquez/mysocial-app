@@ -9,13 +9,22 @@ import {
   TouchableOpacity,
 } from "react-native";
 import HeaderAnimation from "./components/HeaderAnimation";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { StackActions } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import useAuthStore from "../../store/useAuthStore";
 
-const LoginScreen = () => {
-  const navigation = useNavigation();
+type Props = NativeStackScreenProps<any, "AuthScreen">;
+
+const AuthScreen = ({ navigation }: Props) => {
+  const { setToken } = useAuthStore();
+
   const handlePressRegister = () => {
     const pushAction = StackActions.push("RegisterScreen");
     navigation.dispatch(pushAction);
+  };
+
+  const handlePressLogin = () => {
+    setToken("123");
   };
   return (
     <KeyboardAvoidingView
@@ -55,12 +64,10 @@ const LoginScreen = () => {
           </View>
 
           <View style={{ backgroundColor: "transparent", width: "100%" }}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Sign up</Text>
+            <TouchableOpacity onPress={handlePressLogin} style={styles.button}>
+              <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handlePressRegister}
-            >
+            <TouchableOpacity onPress={handlePressRegister}>
               <Text style={[styles.description, { color: "#0363FD" }]}>
                 Create account
               </Text>
@@ -71,6 +78,8 @@ const LoginScreen = () => {
     </KeyboardAvoidingView>
   );
 };
+
+export default AuthScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -138,5 +147,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default LoginScreen;

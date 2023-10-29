@@ -1,14 +1,16 @@
-import { StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AppStack from "./AppStack";
 import AuthStack from "./AuthStack";
+import useAuthStore from "../store/useAuthStore";
 
 const AppNavigator = () => {
-  const isAuth = true;
+  const { token } = useAuthStore();
+  console.log(token)
   return (
     <NavigationContainer>
-      {isAuth ? <AppStack /> : <AuthStack />}
+      {token ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
