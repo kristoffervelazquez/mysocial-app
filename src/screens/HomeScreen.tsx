@@ -16,7 +16,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TopTabNavigation username={'hanna03'} />
+      <TopTabNavigation username={'kingg'} />
     </View>
   );
 };
