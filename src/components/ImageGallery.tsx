@@ -1,12 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, View, } from "react-native";
 import ImageView from "react-native-image-viewing";
 import React, { useState } from "react";
 import ImageFooter from "./ImageFooter";
 import ImageHeader from "./ImageHeader";
 import MyFAB from "./MyFab";
 import * as ImagePicker from "expo-image-picker";
-import { Camera } from "expo-camera";
 import { useRoute } from "@react-navigation/native";
+import { FlatList } from "react-native-collapsible-tab-view";
+import ImageRender from "./ImageRender";
 
 interface IImage {
   imageUrl: string;
@@ -22,6 +23,11 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
   const [index, setIndex] = useState(0);
   const [caption, setCaption] = useState<string>("");
   const [image, setImage] = useState("");
+  const [items, setItems] = useState(
+    images.map((image) => {
+      return { uri: image.imageUrl, id: image._id };
+    })
+  );
   const handlePress = (i: number) => {
     setIndex(i);
     setIsVisible(true);
@@ -30,7 +36,6 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
   const isPublicProfile = route.name === "PublicProfileScreen";
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     const { assets, canceled } = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -43,80 +48,55 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
       console.log(assets[0].base64);
     }
   };
-  // const takePhoto = async () => {
-  //   const getCameraPermissions = async () => {
-  //     const { status } = await Camera.requestCameraPermissionsAsync();
-
-  //     if (status !== "granted") {
-  //       // Los permisos no se concedieron, maneja el caso según tus necesidades
-  //       console.log("Permisos de cámara no concedidos.");
-  //     }
-  //   };
-
-  //   const { assets, canceled } = await ImagePicker.launchCameraAsync({
-  //     quality: 1,
-
-  //     cameraType: ImagePicker.CameraType.front,
-  //   });
-
-  //   if (!canceled) {
-  //     setImage(assets[0].uri);
-  //   }
-  // };
   return (
-    <>
-      {images.map((item, i) => {
-        const { imageUrl, _id } = item;
-
-        return (
-          <View style={styles.imageContainer} key={_id}>
-            <View>
-              <TouchableOpacity onPress={() => handlePress(i)}>
-                <Image style={styles.image} source={{ uri: imageUrl }} />
-              </TouchableOpacity>
-              <View>
-                <ImageView
-                  images={images.map((image) => ({ uri: image.imageUrl }))}
-                  imageIndex={index}
-                  keyExtractor={(_, index) => index.toString()}
-                  visible={visible}
-                  onRequestClose={() => setIsVisible(false)}
-                  animationType="fade"
-                  presentationStyle="overFullScreen"
-                  HeaderComponent={() => <ImageHeader caption={caption} />}
-                  FooterComponent={() => (
-                    <ImageFooter imageId={images[index].imageUrl} />
-                  )}
-                  onImageIndexChange={(i) => {
-                    setCaption(images[i].caption);
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-        );
-      })}
+    <View style={styles.container}>
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        numColumns={3}
+        renderItem={({ item, index }) => (
+          <ImageRender item={item} index={index} handlePress={handlePress} />
+        )}
+        ListEmptyComponent={() => <Text>No images</Text>}
+        onRefresh={() => console.log("refreshing")}
+        refreshing={false}
+      />
+      {images.length > 0 && (
+        <ImageView
+          images={items}
+          imageIndex={index}
+          keyExtractor={(_, index) => items[index].id}
+          visible={visible}
+          onRequestClose={() => setIsVisible(false)}
+          animationType="fade"
+          presentationStyle="overFullScreen"
+          HeaderComponent={() => <ImageHeader caption={caption} />}
+          FooterComponent={() => (
+            <ImageFooter imageId={images[index].imageUrl} />
+          )}
+          onImageIndexChange={(i) => {
+            setCaption(images[i].caption);
+          }}
+        />
+      )}
       {!isPublicProfile && (
-        <View style={{ position: "absolute", top: 10, left: 10 }}>
+        <View style={styles.fab}>
           <MyFAB onPress={pickImage} />
         </View>
       )}
-    </>
+    </View>
   );
 };
 
 export default ImageGallery;
 
 const styles = StyleSheet.create({
-  imageContainer: {
-    width: "33.2%",
-    borderBottomWidth: 1,
-    borderColor: "#ddd",
+  container: {
+    flex: 1,
   },
-  image: {
-    // aspectRatio: 1,
-    // paddingTop: "100%",
-    width: "100%",
-    height: 300,
+  fab: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
   },
 });

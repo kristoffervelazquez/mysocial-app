@@ -10,8 +10,7 @@ interface RouteParams extends RouteProp<ParamListBase> {
 
 const QrScreen = () => {
   const route = useRoute<RouteParams>();
-  const data = route.params.data;
-  console.log(data)
+  // const data = route.params.data;
   return (
     <View style={styles.container}>
       <Image

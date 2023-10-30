@@ -7,7 +7,7 @@ import useAuthStore from "../store/useAuthStore";
 
 const AppNavigator = () => {
   const { token } = useAuthStore();
-  console.log(token)
+
   return (
     <NavigationContainer>
       {token ? <AppStack /> : <AuthStack />}

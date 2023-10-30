@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Social } from "../shared/interfaces";
 import SocialIcon from "./SocialIcon";
 
@@ -11,13 +11,6 @@ interface Props {
 const SocialCard = ({ item, onPress }: Props) => {
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
-      {/* <Image source={{ uri: '' }} style={styles.icon} /> */}
-      {/* <Icon
-        name={icon.iconName}
-        size={48}
-        color={icon.color}
-        style={styles.icon}
-      /> */}
       <SocialIcon name={item.type.name} size={48} style={styles.icon}/>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.type.name}</Text>

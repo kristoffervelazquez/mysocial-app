@@ -2,7 +2,6 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIconStyle } from "@fortawesome/react-native-fontawesome";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { useEffect } from "react";
 
 interface Props {
   name: string;

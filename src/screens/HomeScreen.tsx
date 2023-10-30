@@ -2,8 +2,7 @@ import { StyleSheet, View } from "react-native";
 import React, { useEffect } from "react";
 import TopTabNavigation from "../navigation/TopTabNavigation";
 import * as Notifications from "expo-notifications";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-
+import useAuthStore from "../store/useAuthStore";
 
 const HomeScreen = () => {
   // Pedir permisos para notificaciones
@@ -13,10 +12,11 @@ const HomeScreen = () => {
     })();
   }, []);
 
+  const {user_id} = useAuthStore();
 
   return (
     <View style={styles.container}>
-      <TopTabNavigation />
+      <TopTabNavigation username={'pinolais'} />
     </View>
   );
 };

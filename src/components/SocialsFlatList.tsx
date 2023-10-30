@@ -37,7 +37,7 @@ const SocialsFlatList = ({ data }: Props) => {
   };
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={styles.container}>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -49,4 +49,8 @@ const SocialsFlatList = ({ data }: Props) => {
 
 export default SocialsFlatList;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
