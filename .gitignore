@@ -38,3 +38,6 @@ yarn-error.*
 ios
 #android
 android
+
+#env
+.env
