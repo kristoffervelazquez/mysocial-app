@@ -1,17 +1,31 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 import MyLoader from "../components/MyLoader";
+import useAuthStore from "../store/useAuthStore";
 
 export default function App() {
   const [visible, setVisible] = React.useState(true);
-  React.useEffect(() => {
+  const { setToken } = useAuthStore();
+  const showLoader = (sec: number = 3000) => {
+    setVisible(true);
     setTimeout(() => {
-      setVisible(!visible);
-    }, 3000);
+      setVisible(false);
+    }, sec);
+  };
+  React.useEffect(() => {
+    showLoader();
   }, []);
-  
+
+  const handleLogout = () => {
+    setToken("");
+  };
+
   return (
     <View style={styles.container}>
+      <View style={styles.buttonContainer}>
+        <Button title="Show loader" onPress={() => showLoader(6000)} />
+        <Button title="Logout" onPress={handleLogout} />
+      </View>
       <MyLoader visible={visible} />
     </View>
   );

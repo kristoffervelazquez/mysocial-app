@@ -9,7 +9,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserData } from "../api/cloud/user";
 import MyLoader from "../components/MyLoader";
 
-
 interface Props {
   username: string;
 }
@@ -20,6 +19,7 @@ const TopTabNavigation = ({ username }: Props) => {
     queryFn: () => {
       return getUserData(username);
     },
+    staleTime: 1000 * 60 * 2,
   });
 
   if (userQuery.isLoading) return <MyLoader visible />;
@@ -34,13 +34,14 @@ const TopTabNavigation = ({ username }: Props) => {
   const user = userQuery.data;
   return (
     <View style={styles.container}>
+      {/* {userQuery.isFetching && <MyLoader visible={userQuery.isFetching} />} */}
       <Tabs.Container
         headerHeight={330}
         renderHeader={() => <UserProfileHeader user={user!} />}
       >
         <Tabs.Tab name="Gallery">
           <View style={styles.container}>
-            <GalleryTab images={user?.images!} />
+            <GalleryTab images={user?.images!} query={userQuery} />
           </View>
         </Tabs.Tab>
         <Tabs.Tab name="Socials">

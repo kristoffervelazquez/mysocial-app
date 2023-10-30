@@ -1,16 +1,18 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import ImageGallery from "../../components/ImageGallery";
-import { Image } from "../../shared/interfaces";
+import { Image, User } from "../../shared/interfaces";
+import { UseQueryResult } from "@tanstack/react-query";
 
 interface Props {
   images: Image[];
+  query: UseQueryResult<User, Error>
 }
 
-const GalleryTab = ({images}: Props) => {
+const GalleryTab = ({images, query}: Props) => {
   return (
     <View style={styles.container}>
-      <ImageGallery images={images} />
+      <ImageGallery images={images} query={query} />
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import ImageView from "react-native-image-viewing";
 import React, { useState } from "react";
 import ImageFooter from "./ImageFooter";
@@ -8,6 +8,8 @@ import * as ImagePicker from "expo-image-picker";
 import { useRoute } from "@react-navigation/native";
 import { FlatList } from "react-native-collapsible-tab-view";
 import ImageRender from "./ImageRender";
+import { UseQueryResult } from "@tanstack/react-query";
+import { User } from "../shared/interfaces";
 
 interface IImage {
   imageUrl: string;
@@ -16,9 +18,10 @@ interface IImage {
 }
 interface ImageGalleryProps {
   images: IImage[];
+  query: UseQueryResult<User, Error>;
 }
 
-const ImageGallery = ({ images }: ImageGalleryProps) => {
+const ImageGallery = ({ images, query }: ImageGalleryProps) => {
   const [visible, setIsVisible] = useState(false);
   const [index, setIndex] = useState(0);
   const [caption, setCaption] = useState<string>("");
@@ -58,8 +61,10 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
           <ImageRender item={item} index={index} handlePress={handlePress} />
         )}
         ListEmptyComponent={() => <Text>No images</Text>}
-        onRefresh={() => console.log("refreshing")}
-        refreshing={false}
+        onRefresh={() => {
+          query.refetch();
+        }}
+        refreshing={query.isFetching}
       />
       {images.length > 0 && (
         <ImageView
