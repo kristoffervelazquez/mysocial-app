@@ -6,11 +6,11 @@ import AuthStack from "./AuthStack";
 import useAuthStore from "../store/useAuthStore";
 
 const AppNavigator = () => {
-  const { token } = useAuthStore();
+  const { loggedUser } = useAuthStore();
 
   return (
     <NavigationContainer>
-      {token ? <AppStack /> : <AuthStack />}
+      {loggedUser ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };

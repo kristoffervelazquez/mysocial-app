@@ -1,11 +1,13 @@
 import * as React from "react";
-import { Button, StyleSheet, View } from "react-native";
+import { Alert, Button, StyleSheet, View } from "react-native";
 import MyLoader from "../components/MyLoader";
 import useAuthStore from "../store/useAuthStore";
+import { logout } from "../api/cloud/auth";
+import { useMutation } from "@tanstack/react-query";
 
 export default function App() {
   const [visible, setVisible] = React.useState(true);
-  const { setToken } = useAuthStore();
+  const { unsetUser, loggedUser } = useAuthStore();
   const showLoader = (sec: number = 3000) => {
     setVisible(true);
     setTimeout(() => {
@@ -16,8 +18,30 @@ export default function App() {
     showLoader();
   }, []);
 
+  const mutation = useMutation({
+    mutationKey: ["auth"],
+    mutationFn: logout,
+    onSuccess: () => {
+      unsetUser();
+    },
+    onError: (e: any) => {
+      console.log("error", e);
+    },
+  });
+
   const handleLogout = () => {
-    setToken("");
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Logout",
+        onPress: () => {
+          mutation.mutate(loggedUser?.email!);
+        },
+      },
+    ]);
   };
 
   return (
@@ -26,7 +50,7 @@ export default function App() {
         <Button title="Show loader" onPress={() => showLoader(6000)} />
         <Button title="Logout" onPress={handleLogout} />
       </View>
-      <MyLoader visible={visible} />
+      <MyLoader visible={mutation.isPending} />
     </View>
   );
 }

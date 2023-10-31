@@ -3,8 +3,11 @@ import React, { useEffect } from "react";
 import TopTabNavigation from "../navigation/TopTabNavigation";
 import * as Notifications from "expo-notifications";
 import useAuthStore from "../store/useAuthStore";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-const HomeScreen = () => {
+type StackScreenProps = NativeStackScreenProps<any, "HomeScreen">;
+
+const HomeScreen = ({ navigation }: StackScreenProps) => {
   // Pedir permisos para notificaciones
   useEffect(() => {
     (async () => {
@@ -12,11 +15,10 @@ const HomeScreen = () => {
     })();
   }, []);
 
-  const {user_id} = useAuthStore();
-
+  const { loggedUser } = useAuthStore();
   return (
     <View style={styles.container}>
-      <TopTabNavigation username={'kingg'} />
+      <TopTabNavigation username={loggedUser?.username!} />
     </View>
   );
 };
