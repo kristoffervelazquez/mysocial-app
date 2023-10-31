@@ -7,75 +7,122 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import HeaderAnimation from "./components/HeaderAnimation";
 import { StackActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useAuthStore from "../../store/useAuthStore";
+import useForm from "../../hooks/useForm";
+import { login } from "../../api/cloud/auth";
+import { useMutation } from "@tanstack/react-query";
+import MyLoader from "../../components/MyLoader";
 
 type Props = NativeStackScreenProps<any, "AuthScreen">;
 
 const AuthScreen = ({ navigation }: Props) => {
-  const { setToken } = useAuthStore();
+  const { setLoggedUser } = useAuthStore();
+
+  const passwordRef = React.useRef<TextInput>(null);
 
   const handlePressRegister = () => {
     const pushAction = StackActions.push("RegisterScreen");
     navigation.dispatch(pushAction);
   };
 
-  const handlePressLogin = () => {
-    setToken("123");
-  };
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-      enabled
-    >
-      <View style={styles.animatedContainer}>
-        <HeaderAnimation />
-      </View>
-      <View style={styles.box}>
-        {/* Login Form */}
-        <Text style={styles.title}>Welcome to mySocial!</Text>
-        <Text style={styles.description}>
-          Please sign up to start using the app.
-        </Text>
-        <View style={styles.formContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            textContentType="emailAddress"
-            keyboardType="email-address"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            textContentType="password"
-            secureTextEntry
-          />
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.description}>Forgot your password? </Text>
-            <TouchableOpacity>
-              <Text style={[styles.description, { color: "#0363FD" }]}>
-                Click here
-              </Text>
-            </TouchableOpacity>
-          </View>
+  const mutation = useMutation({
+    mutationKey: ["auth"],
+    mutationFn: login,
+    onSuccess: (data) => {
+      setLoggedUser(data);
+    },
+    onError: (error: IError) => {
+      if (error.response.data.error) {
+        return alert(error.response.data.error);
+      }
 
-          <View style={{ backgroundColor: "transparent", width: "100%" }}>
-            <TouchableOpacity onPress={handlePressLogin} style={styles.button}>
-              <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handlePressRegister}>
-              <Text style={[styles.description, { color: "#0363FD" }]}>
-                Create account
-              </Text>
-            </TouchableOpacity>
+      alert(error.response.data.msg);
+    },
+  });
+
+  const handlePressLogin = async () => {
+    if (!email || !password) {
+      return alert("Please fill all the fields");
+    }
+
+    mutation.mutate({ email, password });
+  };
+
+  const { email, formulario, onChange, password } = useForm({
+    email: "",
+    password: "",
+  });
+
+  return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+        enabled
+      >
+        <View style={styles.animatedContainer}>
+          <HeaderAnimation />
+        </View>
+        <View style={styles.box}>
+          {/* Login Form */}
+          <Text style={styles.title}>Welcome to mySocial!</Text>
+          <Text style={styles.description}>
+            Please sign up to start using the app.
+          </Text>
+          <View style={styles.formContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              textContentType="emailAddress"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={(text) => onChange(text, "email")}
+              onSubmitEditing={() => passwordRef.current?.focus()}              
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              textContentType="password"
+              secureTextEntry
+              value={password}
+              onChangeText={(text) => onChange(text, "password")}
+              ref={passwordRef}
+              onSubmitEditing={handlePressLogin}
+            />
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.description}>Forgot your password? </Text>
+              <TouchableOpacity>
+                <Text style={[styles.description, { color: "#0363FD" }]}>
+                  Click here
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ backgroundColor: "transparent", width: "100%" }}>
+              <TouchableOpacity
+                onPress={handlePressLogin}
+                style={styles.button}
+                disabled={!formulario.email || !formulario.password}
+              >
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handlePressRegister}>
+                <Text style={[styles.description, { color: "#0363FD" }]}>
+                  Create account
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+        {mutation.isPending && <MyLoader visible={mutation.isPending} />}
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
