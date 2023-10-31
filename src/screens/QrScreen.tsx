@@ -1,25 +1,46 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
-import { ParamListBase, RouteProp, useRoute } from "@react-navigation/native";
+import { StyleSheet, Text, View, Image, Button } from "react-native";
+import React, { useEffect } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Social } from "../shared/interfaces";
+import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
+import SocialIcon from "../components/SocialIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-interface RouteParams extends RouteProp<ParamListBase> {
-  params: {
-    data?: string[];
-  };
-}
+type Props = NativeStackScreenProps<any, "QrScreen">;
 
-const QrScreen = () => {
-  const route = useRoute<RouteParams>();
-  // const data = route.params.data;
+const QrScreen = ({ navigation, route }: Props) => {
+  const { data } = route.params!;
+
+  const socials = data.socials as Social[];
+
+  useEffect(() => {}, []);
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={{
-          uri: "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fmy-social-v1.netlify.app%2Fkingg",
-        }}
-      />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container}>
+        <Image
+          style={styles.image}
+          source={{
+            uri: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fmy-social-v1.netlify.app%2F${data}`,
+          }}
+        />
+          <FlatList
+            data={socials}
+            renderItem={({ item }) => (
+              <SocialIcon name={item.type.name} size={30} />
+            )}
+            keyExtractor={(item) => item._id}
+            contentContainerStyle={styles.flatlist}
+            horizontal={true}
+            ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
+            scrollEnabled={false}
+          />
+
+        <Button
+          title="Go to Home"
+          onPress={() => navigation.navigate("HomeScreen")}
+        />
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 
@@ -32,9 +53,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: '90%',
-    height: '90%',
-    resizeMode: 'contain',
-    marginBottom: 20
+    width: 400,
+    height: 400,
+    resizeMode: "contain",
+  },
+  flatlist: {
+    width: "90%",
+    height: "50%",
+    marginTop: 40,
+    padding: 10,
+    justifyContent: "center",
   },
 });
