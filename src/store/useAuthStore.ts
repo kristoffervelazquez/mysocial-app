@@ -6,11 +6,13 @@ import { zustandStorage } from "./mmkv";
 const useAuthStore = create(
   persist<AuthStore>(
     (set) => ({
-      token: "",
-      user_id: "",
-      setUserId: (user_id: string) => set({ user_id }),
-      setToken: (token: string) => set({ token }),
-      removeToken: () => set({ token: "" }),
+      loggedUser: null,
+      setLoggedUser(user) {
+        set({ loggedUser: user });
+      },
+      unsetUser() {
+        set({ loggedUser: null });
+      },
     }),
     {
       name: "auth-store",

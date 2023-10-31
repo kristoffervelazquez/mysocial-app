@@ -1,7 +1,7 @@
+import { LoginResponse } from "../../shared/interfaces/auth";
+
 export interface AuthStore {
-  token: string;
-  setToken: (token: string) => void;
-  removeToken: () => void;
-  user_id: string;
-  setUserId: (user_id: string) => void;
+  loggedUser: LoginResponse | null;
+  setLoggedUser: (user: LoginResponse) => void;
+  unsetUser: () => void;
 }
