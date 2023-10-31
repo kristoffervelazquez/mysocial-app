@@ -60,7 +60,20 @@ const ImageGallery = ({ images, query }: ImageGalleryProps) => {
         renderItem={({ item, index }) => (
           <ImageRender item={item} index={index} handlePress={handlePress} />
         )}
-        ListEmptyComponent={() => <Text>No images</Text>}
+        ListEmptyComponent={() => {
+          if (isPublicProfile) return null;
+          return (
+            <View
+              style={{
+                flex: 1,
+                padding: 20,
+                alignItems: "center",
+              }}
+            >
+              <Text>No images yet, upload your first image!</Text>
+            </View>
+          );
+        }}
         onRefresh={() => {
           query.refetch();
         }}

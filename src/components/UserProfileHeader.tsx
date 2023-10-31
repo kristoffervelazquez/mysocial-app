@@ -11,10 +11,12 @@ interface Props {
 const UserProfileHeader = (props: Props) => {
   const [visible, setIsVisible] = React.useState(false);
   const { avatar, username, name, lastName } = props.user;
+
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.avatarContainer} onPress={() => setIsVisible(true)}>
-        <Image source={{ uri: avatar }} style={styles.avatar} />
+        <Image source={{ uri: avatar ? avatar : 'https://i.stack.imgur.com/34AD2.jpg'}} style={styles.avatar} />
       </TouchableOpacity>
       <Text style={styles.username}>{name} {lastName}</Text>
       <Text style={styles.username}>@{username}</Text>
