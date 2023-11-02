@@ -19,7 +19,7 @@ const TopTabNavigation = ({ username }: Props) => {
     queryFn: () => {
       return getUserData(username);
     },
-    staleTime: 1000 * 60 * 2,
+    staleTime: 1000 * 60 * 5,
   });
 
   if (userQuery.isLoading) return <MyLoader visible />;

@@ -1,11 +1,13 @@
 import {
   Alert,
   Button,
+  Keyboard,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
   View,
+  TouchableWithoutFeedback
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Social } from "../shared/interfaces";
@@ -13,11 +15,18 @@ import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import SocialIcon from "../components/SocialIcon";
 import MyLoader from "../components/MyLoader";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addNewSocial, deleteSocial, editSocial } from "../api/cloud/socials";
+import useAuthStore from "../store/useAuthStore";
 
 type Props = NativeStackScreenProps<any, "EditSocialScreen">;
+interface IMutation {
+  type: "create" | "update" | "delete";
+}
 
 const EditSocialScreen = ({ navigation, route }: Props) => {
   const social: Social | null = (route.params as { social: Social })?.social;
+  const { loggedUser } = useAuthStore();
 
   const [selectedSocial, setSelectedSocial] = useState(
     social?.type._id || "64f99738f21565f0a5f67a0c"
@@ -32,25 +41,62 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
     } as any);
   }, []);
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: ["user", loggedUser?.username],
+    mutationFn: ({ type }: IMutation) => {
+      switch (type) {
+        case "create":
+          return addNewSocial({
+            description,
+            url,
+            type: selectedSocial,
+            token: loggedUser?.token as string,
+          });
+        case "update":
+          return editSocial({
+            description,
+            url,
+            type: selectedSocial,
+            token: loggedUser?.token as string,
+            id: social?._id as string,
+          });
+        case "delete":
+          return deleteSocial({ token: loggedUser?.token!, id: social?._id });
+        default:
+          return new Promise((resolve) => {
+            resolve(navigation.goBack());
+          });
+      }
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["user", loggedUser?.username],
+      });
+      setLoading(false);
+      navigation.goBack();
+    },
+    onError: (e) => {
+      console.log(e);
+      setLoading(false);
+      Alert.alert("Something went wrong");
+    },
+  });
+
   const handleSave = () => {
     if (!url.trim() || !description.trim()) {
       return Alert.alert("Please fill all the fields");
     }
 
     if (social) {
-      // Editar
-      // ...
+      mutation.mutate({ type: "update" });
     } else {
-      // Crear
-      // ...
+      mutation.mutate({ type: "create" });
     }
-    setLoading(true);
-
-    setTimeout(() => {
-      Alert.alert("Saved!");
-      navigation.goBack();
-      setLoading(false);
-    },3000);
   };
 
   const handleDelete = () => {
@@ -66,7 +112,7 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
         {
           text: "OK",
           onPress: () => {
-            navigation.goBack();
+            mutation.mutate({ type: "delete" });
           },
         },
       ],
@@ -75,69 +121,73 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.title}>
-        {data.find((item) => item._id === selectedSocial)?.name}
-      </Text>
-      <SocialIcon
-        name={data.find((item) => item._id === selectedSocial)?.name as string}
-        size={40}
-        style={{ alignSelf: "center" }}
-      />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView style={styles.container}>
+        <Text style={styles.title}>
+          {data.find((item) => item._id === selectedSocial)?.name}
+        </Text>
+        <SocialIcon
+          name={
+            data.find((item) => item._id === selectedSocial)?.name as string
+          }
+          size={40}
+          style={{ alignSelf: "center" }}
+        />
 
-      <View style={styles.formContainer}>
-        <View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>URL:</Text>
+        <View style={styles.formContainer}>
+          <View>
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>URL:</Text>
 
-            <TextInput
-              placeholder="URL"
-              style={styles.input}
-              keyboardType="url"
-              textContentType="URL"
-              value={url}
-              onChangeText={setUrl}
-            />
+              <TextInput
+                placeholder="URL"
+                style={styles.input}
+                keyboardType="url"
+                textContentType="URL"
+                value={url}
+                onChangeText={setUrl}
+              />
+            </View>
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>Description:</Text>
+              <TextInput
+                multiline
+                placeholder="Description"
+                style={styles.input}
+                value={description}
+                onChangeText={setDescription}
+              />
+            </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Description:</Text>
-            <TextInput
-              multiline
-              placeholder="Description"
-              style={styles.input}
-              value={description}
-              onChangeText={setDescription}
-            />
+          <View>
+            <Text style={{ textAlign: "center", fontWeight: "500" }}>
+              Choose a social network
+            </Text>
+            <Picker
+              selectedValue={selectedSocial}
+              onValueChange={(itemValue) => setSelectedSocial(itemValue)}
+            >
+              {data.map((item) => {
+                return (
+                  <Picker.Item
+                    key={item._id}
+                    label={item.name}
+                    value={item._id}
+                  />
+                );
+              })}
+            </Picker>
+          </View>
+          <View style={styles.inputContaier}>
+            {social && (
+              <Button title="Delete" onPress={handleDelete} color={"red"} />
+            )}
+            <Button title="Save" onPress={handleSave} />
           </View>
         </View>
-        <View>
-          <Text style={{ textAlign: "center", fontWeight: "500" }}>
-            Choose a social network
-          </Text>
-          <Picker
-            selectedValue={selectedSocial}
-            onValueChange={(itemValue) => setSelectedSocial(itemValue)}
-          >
-            {data.map((item) => {
-              return (
-                <Picker.Item
-                  key={item._id}
-                  label={item.name}
-                  value={item._id}
-                />
-              );
-            })}
-          </Picker>
-        </View>
-        <View style={styles.inputContaier}>
-          {social && (
-            <Button title="Delete" onPress={handleDelete} color={"red"} />
-          )}
-          <Button title="Save" onPress={handleSave} />
-        </View>
-      </View>
-      <MyLoader visible={loading} />
-    </KeyboardAvoidingView>
+        <MyLoader visible={loading} />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
