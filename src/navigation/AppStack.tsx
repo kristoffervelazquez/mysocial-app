@@ -16,6 +16,7 @@ import HomeScreen from "../screens/HomeScreen";
 import PublicProfileScreen from "../screens/PublicProfileScreen";
 import EditSocialScreen from "../screens/EditSocialScreen";
 import EditAboutMeScreen from "../screens/EditAboutMeScreen";
+import QrDropDownMenuButton from "../components/QrDropDownMenuButton";
 
 interface ButtonProps {
   navigation: NavigationProp<any>;
@@ -31,7 +32,7 @@ const AppStack = () => {
         name="HomeScreen"
         component={HomeScreen}
         options={{
-          headerRight: () => <QrButton navigation={navigation} />,
+          headerRight: () => <QrDropDownMenuButton />,
           headerTitle: "My Social",
           headerTitleAlign: "center",
           headerLeft: () => <SettingsButton navigation={navigation} />,

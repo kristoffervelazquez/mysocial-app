@@ -24,8 +24,8 @@ interface ImageGalleryProps {
 const ImageGallery = ({ images, query }: ImageGalleryProps) => {
   const [visible, setIsVisible] = useState(false);
   const [index, setIndex] = useState(0);
-  const [caption, setCaption] = useState<string>("");
   const [image, setImage] = useState("");
+  const [activeImage, setActiveImage] = useState<IImage>();
   const [items, setItems] = useState(
     images.map((image) => {
       return { uri: image.imageUrl, id: image._id };
@@ -88,12 +88,12 @@ const ImageGallery = ({ images, query }: ImageGalleryProps) => {
           onRequestClose={() => setIsVisible(false)}
           animationType="fade"
           presentationStyle="overFullScreen"
-          HeaderComponent={() => <ImageHeader caption={caption} />}
+          HeaderComponent={() => <ImageHeader id={activeImage?._id!} caption={activeImage?.caption!} />}
           FooterComponent={() => (
             <ImageFooter imageId={images[index].imageUrl} />
           )}
           onImageIndexChange={(i) => {
-            setCaption(images[i].caption);
+            setActiveImage(images[i]);
           }}
         />
       )}
