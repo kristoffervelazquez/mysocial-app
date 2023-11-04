@@ -1,22 +1,53 @@
 import {
+  Alert,
   Button,
   Keyboard,
   StyleSheet,
-  Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { editUserData } from "../api/cloud/user";
+import useAuthStore from "../store/useAuthStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import MyLoader from "../components/MyLoader";
 
 type Props = NativeStackScreenProps<any, "EditAboutMeScreen">;
 
 const EditAboutMeScreen = ({ navigation, route }: Props) => {
   const about = (route.params as { about: string })?.about;
-  const [value, onChangeText] = React.useState(about || "");
+  const [value, onChangeText] = useState(about || "");
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
+  const { loggedUser } = useAuthStore();
+  const queryClient = useQueryClient();
+
+  const mutate = useMutation({
+    mutationKey: ["aboutMe", loggedUser?.username],
+    mutationFn: () => {
+      return editUserData({ about: value }, loggedUser?.token as string);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["user", loggedUser?.username],
+      });
+      Alert.alert("Success", "About me updated successfully");
+      setLoading(false);
+    },
+    onError: (error: IError) => {
+      console.log(error);
+      Alert.alert("Error", "There was an error, please try again later");
+      setLoading(false);
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+  });
+
+  const handleSave = async () => {
+    await mutate.mutateAsync();
     navigation.goBack();
   };
   return (
@@ -38,6 +69,7 @@ const EditAboutMeScreen = ({ navigation, route }: Props) => {
           <Button title="Cancel" onPress={handleSave} color={"red"} />
           <Button title="Save" onPress={handleSave} />
         </View>
+        <MyLoader visible={loading} />
       </View>
     </TouchableWithoutFeedback>
   );
