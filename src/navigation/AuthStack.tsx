@@ -3,6 +3,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import AuthScreen from "../screens/auth/AuthScreen";
 import RegisterScreen from "../screens/auth/RegisterScreen";
+import ForgotPasswordScreen from "../screens/auth/ForgotPasswordScreen";
 
 const AuthStack = () => {
   const Stack = createStackNavigator();
@@ -12,6 +13,7 @@ const AuthStack = () => {
     }}>
       <Stack.Screen name="AuthScreen" component={AuthScreen} />
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+      <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   );
 };

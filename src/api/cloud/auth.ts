@@ -40,4 +40,12 @@ async function register(form: IRegisterForm) {
   return res.data;
 }
 
-export { login, logout, register };
+async function forgotPassword(email: string) {
+  const res = await API.post("/auth/forgotPassword", {
+    email,
+  });
+
+  return res.data;
+}
+
+export { login, logout, register, forgotPassword };

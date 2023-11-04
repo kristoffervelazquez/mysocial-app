@@ -97,7 +97,7 @@ const AuthScreen = ({ navigation }: Props) => {
             />
             <View style={{ flexDirection: "row" }}>
               <Text style={styles.description}>Forgot your password? </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => {navigation.navigate('ForgotPasswordScreen')}}>
                 <Text style={[styles.description, { color: "#0363FD" }]}>
                   Click here
                 </Text>
