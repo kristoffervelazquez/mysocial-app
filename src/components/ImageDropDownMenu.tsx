@@ -13,7 +13,7 @@ interface Props {
 }
 const ImageDropDownMenu = ({ id }: Props) => {
   const route = useRoute();
-  const isPublicProfile = route.name != "PublicProfileScreen";
+  const isPublicProfile = route.name === "PublicProfileScreen";
   return (
     <SelectDropdown
       data={isPublicProfile ? publicButtons : privateButtons}
