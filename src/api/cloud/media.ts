@@ -1,10 +1,19 @@
 import API from "../config/api";
 
+interface IUploadImage {
+  token: string;
+  file: string;
+}
 
-export async function uploadImage(token: string, file: string) {
+interface IDeleteImage {
+  token: string;
+  id: string;
+}
+
+export async function uploadImage({ token, file }: IUploadImage) {
   const res = await API.post(
     "media/upload",
-    { file },
+    { file: `data:image/jpeg;base64,${file}` },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -14,7 +23,7 @@ export async function uploadImage(token: string, file: string) {
   return { ...res.data, status: res.status };
 }
 
-export async function deleteImage(token: string, id: string) {
+export async function deleteImage({ token, id }: IDeleteImage) {
   const res = await API.delete(`media/delete`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -27,10 +36,10 @@ export async function deleteImage(token: string, id: string) {
   return { ...res.data, status: res.status };
 }
 
-export async function editAvatar(token: string, file: string) {
+export async function editAvatar({ token, file }: IUploadImage) {
   const res = await API.put(
     "media/avatar",
-    { file },
+    { file: `data:image/jpeg;base64,${file}` },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -40,10 +49,10 @@ export async function editAvatar(token: string, file: string) {
   return { ...res.data, status: res.status };
 }
 
-export async function editBanner(token: string, file: string) {
+export async function editBanner({ token, file }: IUploadImage) {
   const res = await API.put(
     "media/banner",
-    { file },
+    { file: `data:image/jpeg;base64,${file}` },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -52,4 +61,3 @@ export async function editBanner(token: string, file: string) {
   );
   return { ...res.data, status: res.status };
 }
-
