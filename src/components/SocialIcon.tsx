@@ -93,6 +93,34 @@ const SocialIcon = ({ name, style, size }: Props) => {
           color={"#7289DA"}
         />
       );
+      case "Snapchat":
+      return (
+        <FontAwesomeIcon
+          style={style}
+          icon={["fab", "snapchat"]}
+          size={size}
+          color={"#FFFC00"}
+        />
+      );
+      case "WhatsApp":
+      return (
+        <FontAwesomeIcon
+          style={style}
+          icon={["fab", "whatsapp"]}
+          size={size}
+          color={"#25D366"}
+        />
+      );
+      case "GitHub":
+      return (
+        <FontAwesomeIcon
+          style={style}
+          icon={["fab", "github"]}
+          size={size}
+          color={"#181717"}
+        />
+      );
+
     default:
       return (
         <FontAwesomeIcon

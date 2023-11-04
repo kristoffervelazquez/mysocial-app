@@ -15,9 +15,10 @@ import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import SocialIcon from "../components/SocialIcon";
 import MyLoader from "../components/MyLoader";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addNewSocial, deleteSocial, editSocial } from "../api/cloud/socials";
 import useAuthStore from "../store/useAuthStore";
+import { getWebsites } from "../api/cloud/website";
 
 type Props = NativeStackScreenProps<any, "EditSocialScreen">;
 interface IMutation {
@@ -40,6 +41,13 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
       headerTitleAlign: "center",
     } as any);
   }, []);
+
+  const query = useQuery({
+    queryKey: ["websites"],
+    queryFn: () => getWebsites(loggedUser?.token as string),
+    initialData: data,
+    staleTime: 1000 * 60 * 60, // 1 hour
+  })
 
   const queryClient = useQueryClient();
 
@@ -124,11 +132,11 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.container}>
         <Text style={styles.title}>
-          {data.find((item) => item._id === selectedSocial)?.name}
+          {query.data.find((item) => item._id === selectedSocial)?.name}
         </Text>
         <SocialIcon
           name={
-            data.find((item) => item._id === selectedSocial)?.name as string
+            query.data.find((item) => item._id === selectedSocial)?.name as string
           }
           size={40}
           style={{ alignSelf: "center" }}
@@ -167,7 +175,7 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
               selectedValue={selectedSocial}
               onValueChange={(itemValue) => setSelectedSocial(itemValue)}
             >
-              {data.map((item) => {
+              {query.data.map((item) => {
                 return (
                   <Picker.Item
                     key={item._id}
