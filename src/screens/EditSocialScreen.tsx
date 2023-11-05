@@ -7,7 +7,7 @@ import {
   Text,
   TextInput,
   View,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Social } from "../shared/interfaces";
@@ -45,12 +45,13 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
   const query = useQuery({
     queryKey: ["websites"],
     queryFn: () => getWebsites(loggedUser?.token as string),
-    initialData: data,
-    staleTime: 1000 * 60 * 60, // 1 hour
-  })
+    placeholderData: data,
+    // staleTime: 1000 * 60 * 60, // 1 hour
+  });
 
+  
   const queryClient = useQueryClient();
-
+  
   const mutation = useMutation({
     mutationKey: ["user", loggedUser?.username],
     mutationFn: ({ type }: IMutation) => {
@@ -128,15 +129,20 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
     );
   };
 
+  if(query.isLoading) return <MyLoader visible={true} />
+
+  if(!query.data) return <Text>Something went wrong</Text>
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.container}>
         <Text style={styles.title}>
-          {query.data.find((item) => item._id === selectedSocial)?.name}
+          {query.data?.find((item) => item._id === selectedSocial)?.name}
         </Text>
         <SocialIcon
           name={
-            query.data.find((item) => item._id === selectedSocial)?.name as string
+            query.data?.find((item) => item._id === selectedSocial)
+              ?.name as string
           }
           size={40}
           style={{ alignSelf: "center" }}
@@ -175,7 +181,7 @@ const EditSocialScreen = ({ navigation, route }: Props) => {
               selectedValue={selectedSocial}
               onValueChange={(itemValue) => setSelectedSocial(itemValue)}
             >
-              {query.data.map((item) => {
+              {query.data?.map((item) => {
                 return (
                   <Picker.Item
                     key={item._id}
