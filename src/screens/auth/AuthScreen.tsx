@@ -121,7 +121,7 @@ const AuthScreen = ({ navigation }: Props) => {
               Or continue with
             </Text>
             <GoogleSignInButton onPress={() => {}} />
-            <AppleSignInButton onPress={() => {}} />
+            {Platform.OS === "ios" && <AppleSignInButton onPress={() => {}} />}
             <EmailSignInButton onPress={handlePressRegister} />
 
             {/* <TouchableOpacity onPress={handlePressRegister}>
@@ -147,7 +147,7 @@ const GoogleSignInButton = ({ onPress }: { onPress: () => void }) => {
           source={{
             uri: "https://cdn-icons-png.flaticon.com/512/2504/2504739.png",
           }}
-          style={{ width: 25, height: 25, marginLeft: 5}}
+          style={{ width: 25, height: 25, marginLeft: 5 }}
         />
       </View>
       <View style={{ flex: 4 }}>
@@ -164,7 +164,11 @@ const AppleSignInButton = ({ onPress }: { onPress: () => void }) => {
   return (
     <TouchableOpacity style={styles.OAuthButton} onPress={onPress}>
       <View style={{ flex: 2 }}>
-        <FontAwesomeIcon icon={["fab", "apple"]} size={25} style={{marginLeft: 5}}/>
+        <FontAwesomeIcon
+          icon={["fab", "apple"]}
+          size={25}
+          style={{ marginLeft: 5 }}
+        />
       </View>
       <View style={{ flex: 4 }}>
         <Text style={{ fontSize: 16, fontWeight: "bold", textAlign: "center" }}>
@@ -179,8 +183,8 @@ const AppleSignInButton = ({ onPress }: { onPress: () => void }) => {
 const EmailSignInButton = ({ onPress }: { onPress: () => void }) => {
   return (
     <TouchableOpacity style={styles.OAuthButton} onPress={onPress}>
-      <View style={{ flex: 2}}>
-        <Icon name="mail" size={25} style={{marginLeft: 5}} />
+      <View style={{ flex: 2 }}>
+        <Icon name="mail" size={25} style={{ marginLeft: 5 }} />
       </View>
       <View style={{ flex: 4 }}>
         <Text style={{ fontSize: 16, fontWeight: "bold", textAlign: "center" }}>
