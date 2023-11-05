@@ -78,7 +78,7 @@ const ImageDropDownMenu = ({ id }: Props) => {
         buttonTextAfterSelection={(selectedItem, index) => {
           return "";
         }}
-        defaultButtonText={"Select country"}
+        defaultButtonText={""}
         buttonStyle={{
           backgroundColor: "transparent",
           width: 70,
