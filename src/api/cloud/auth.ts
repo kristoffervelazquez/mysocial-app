@@ -20,9 +20,6 @@ async function login({
     email,
     password,
   });
-
-  console.log(response.data);
-
   return response.data;
 }
 
@@ -48,4 +45,13 @@ async function forgotPassword(email: string) {
   return res.data;
 }
 
-export { login, logout, register, forgotPassword };
+async function signInWithGoogle({ token }: { token: string }): Promise<LoginResponse> {
+  const res = await API.post(
+    "/auth/google/login",
+    {},
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return res.data;
+}
+
+export { login, logout, register, forgotPassword, signInWithGoogle };
