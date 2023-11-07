@@ -9,4 +9,5 @@ export interface LoginResponse {
     name:     string;
     token:    string;
     username: string;
+    googleId?: string;
 }

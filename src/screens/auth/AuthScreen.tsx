@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -16,13 +16,17 @@ import { StackActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import useAuthStore from "../../store/useAuthStore";
 import useForm from "../../hooks/useForm";
-import { login } from "../../api/cloud/auth";
+import { login, signInWithGoogle } from "../../api/cloud/auth";
 import { useMutation } from "@tanstack/react-query";
 import MyLoader from "../../components/MyLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Icon from "react-native-vector-icons/Ionicons";
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+// import * as Facebook from "expo-auth-session/providers/facebook";
 
 type Props = NativeStackScreenProps<any, "AuthScreen">;
+WebBrowser.maybeCompleteAuthSession();
 
 const AuthScreen = ({ navigation }: Props) => {
   const { setLoggedUser } = useAuthStore();
@@ -120,7 +124,7 @@ const AuthScreen = ({ navigation }: Props) => {
             <Text style={[styles.description, { textAlign: "center" }]}>
               Or continue with
             </Text>
-            <GoogleSignInButton onPress={() => {}} />
+            <GoogleSignInButton />
             {Platform.OS === "ios" && <AppleSignInButton onPress={() => {}} />}
             <EmailSignInButton onPress={handlePressRegister} />
 
@@ -139,9 +143,48 @@ const AuthScreen = ({ navigation }: Props) => {
 
 export default AuthScreen;
 
-const GoogleSignInButton = ({ onPress }: { onPress: () => void }) => {
+const GoogleSignInButton = () => {
+  const { setLoggedUser } = useAuthStore();
+
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    // @ts-ignore
+    expoClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_WEB_CLIENT_ID,
+    // @ts-ignore
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_IOS_CLIENT_ID,
+    // @ts-ignore
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_ANDROID_CLIENT_ID,
+  });
+
+  const mutation = useMutation({
+    mutationKey: ["auth"],
+    mutationFn: signInWithGoogle,
+    onSuccess: (data) => {
+      setLoggedUser(data);
+    },
+    onError: (error: IError) => {
+      if (error.response.data.error) {
+        return alert(error.response.data.error);
+      }
+      alert(error.response.data.msg);
+    },
+  });
+
+  const handleGoogleResponse = async () => {
+    if (response?.type === "success") {
+      const accessToken = response.authentication?.accessToken;
+      if (!accessToken) {
+        return alert("No access token");
+      }
+      await mutation.mutateAsync({ token: accessToken });
+    }
+  };
+
+  useEffect(() => {
+    handleGoogleResponse();
+  }, [response]);
+
   return (
-    <TouchableOpacity style={styles.OAuthButton} onPress={onPress}>
+    <TouchableOpacity style={styles.OAuthButton} onPress={() => promptAsync()}>
       <View style={{ flex: 2 }}>
         <Image
           source={{
@@ -156,6 +199,7 @@ const GoogleSignInButton = ({ onPress }: { onPress: () => void }) => {
         </Text>
       </View>
       <View style={{ flex: 2, height: 20 }} />
+      <MyLoader visible={mutation.isPending} />
     </TouchableOpacity>
   );
 };
@@ -207,7 +251,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   box: {
-    flex: 2,
+    flex: 3,
     backgroundColor: "white",
     borderTopRightRadius: 45,
     borderTopLeftRadius: 45,

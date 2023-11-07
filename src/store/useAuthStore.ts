@@ -17,6 +17,7 @@ const useAuthStore = create(
     {
       name: "auth-store",
       storage: createJSONStorage(() => zustandStorage),
+      version: 1,
     }
   )
 );
