@@ -61,7 +61,6 @@
     "react-native-vector-icons": "^10.0.0",
     "react-native-web": "~0.19.6",
     "url-parse": "^1.5.10",
-    "yarn": "^1.22.19",
     "zustand": "^4.4.4"
   },
   "devDependencies": {
