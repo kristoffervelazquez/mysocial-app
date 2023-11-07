@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -23,8 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import * as Facebook from "expo-auth-session/providers/facebook";
-import { makeRedirectUri } from "expo-auth-session";
+// import * as Facebook from "expo-auth-session/providers/facebook";
 
 type Props = NativeStackScreenProps<any, "AuthScreen">;
 WebBrowser.maybeCompleteAuthSession();
@@ -148,11 +147,14 @@ const GoogleSignInButton = () => {
   const { setLoggedUser } = useAuthStore();
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    expoClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_WEB_CLIENT_ID, // ts-ignore
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_IOS_CLIENT_ID, // ts-ignore
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_ANDROID_CLIENT_ID, // ts-ignore
+    // @ts-ignore
+    expoClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_WEB_CLIENT_ID,
+    // @ts-ignore
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_IOS_CLIENT_ID,
+    // @ts-ignore
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_AUTH_ANDROID_CLIENT_ID,
   });
- 
+
   const mutation = useMutation({
     mutationKey: ["auth"],
     mutationFn: signInWithGoogle,
