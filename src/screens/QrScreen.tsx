@@ -9,31 +9,36 @@ import { SafeAreaView } from "react-native-safe-area-context";
 type Props = NativeStackScreenProps<any, "QrScreen">;
 
 const QrScreen = ({ navigation, route }: Props) => {
-  const { data } = route.params!;
+  const data = route.params?.data;
+  const socials = data?.socials as Social[];
+  const username = data?.username;
 
-  const socials = data.socials as Social[];
+  const ids = socials.map((social) => social._id);
 
-  useEffect(() => {}, []);
+  const link = `https://my-social-v1.netlify.app/${username}?socials=${ids}`;
+  const qrUri = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`
+
+  useEffect(() => { }, []);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <Image
           style={styles.image}
           source={{
-            uri: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fmy-social-v1.netlify.app%2F${data}`,
+            uri: qrUri,
           }}
         />
-          <FlatList
-            data={socials}
-            renderItem={({ item }) => (
-              <SocialIcon name={item.type.name} size={30} />
-            )}
-            keyExtractor={(item) => item._id}
-            contentContainerStyle={styles.flatlist}
-            horizontal={true}
-            ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
-            scrollEnabled={false}
-          />
+        <FlatList
+          data={socials}
+          renderItem={({ item }) => (
+            <SocialIcon name={item.type.name} size={30} />
+          )}
+          keyExtractor={(item) => item._id}
+          contentContainerStyle={styles.flatlist}
+          horizontal={true}
+          ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
+          scrollEnabled={false}
+        />
 
         <Button
           title="Go to Home"

@@ -11,12 +11,16 @@ import MyLoader from "../components/MyLoader";
 
 interface Props {
   username: string;
+  query?: string[];
 }
 
-const TopTabNavigation = ({ username }: Props) => {
+const TopTabNavigation = ({ username, query }: Props) => {
   const userQuery = useQuery({
-    queryKey: ["user", username],
+    queryKey: ["user", username, query],
     queryFn: () => {
+      if (query) {
+        return getUserData(username, query);
+      }
       return getUserData(username);
     },
     staleTime: 1000 * 60 * 5,

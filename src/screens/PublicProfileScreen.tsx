@@ -10,6 +10,7 @@ type ProfileProps = NativeStackScreenProps<any, "PublicProfileScreen">;
 const PublicProfileScreen = ({ navigation, route }: ProfileProps) => {
   const { params } = route;
   const { query, username } = getUserAndParamsFromUrl(params?.link);
+  const { socials } = query as { socials: string[] };
   useEffect(() => {
     navigation.setOptions({
       title: username,
@@ -19,7 +20,7 @@ const PublicProfileScreen = ({ navigation, route }: ProfileProps) => {
 
   return (
     <View style={styles.container}>
-      <TopTabNavigation username={username} />
+      <TopTabNavigation username={username} query={socials} />
     </View>
   );
 };

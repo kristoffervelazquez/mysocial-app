@@ -11,11 +11,16 @@ interface EditUserData {
   about: string;
 }
 
-const getUserData = async (userId: string): Promise<User> => {
-  const response = await API.get(`/user/${userId}`);
+const getUserData = async (userId: string, query?: string[]): Promise<User> => {
+  let uri = `/user/${userId}`;
+  if (query) {
+    uri += `?socials=${query}`;
+  }
+  const response = await API.get(uri, {
+  });
   return response.data;
 };
-async function editUserData (data: EditUserData, token: string) {
+async function editUserData(data: EditUserData, token: string) {
   const res = await API.put(`/user`, data, {
     headers: {
       'Authorization': `Bearer ${token}`
