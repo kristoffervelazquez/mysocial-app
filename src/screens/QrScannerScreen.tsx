@@ -6,6 +6,7 @@ import { StackActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as Haptics from "expo-haptics";
 import { showNotification } from "../helpers/showNotification";
+import { openAppSettings } from "../helpers/openSettings";
 
 type ScreenProps = NativeStackScreenProps<any, "QrScanner">;
 const QRScanner = ({ navigation }: ScreenProps) => {
@@ -34,10 +35,7 @@ const QRScanner = ({ navigation }: ScreenProps) => {
   };
 
   const handlePress = () => {
-    const goToPublicProfile = StackActions.replace("PublicProfileScreen", {
-      link: "https://my-social-v1.netlify.app/kingg?id=123&name=kristoffer&age=20",
-    });
-    navigation.dispatch(goToPublicProfile);
+    openAppSettings();
   };
 
   return (
