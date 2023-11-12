@@ -66,7 +66,7 @@ const EditAboutMeScreen = ({ navigation, route }: Props) => {
           value={value}
         />
         <View style={styles.buttonContainer}>
-          <Button title="Cancel" onPress={handleSave} color={"red"} />
+          <Button title="Cancel" onPress={navigation.goBack} color={"red"} />
           <Button title="Save" onPress={handleSave} />
         </View>
         <MyLoader visible={loading} />
