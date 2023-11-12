@@ -1,22 +1,12 @@
 import * as React from "react";
-import { Alert, Button, StyleSheet, View } from "react-native";
-import MyLoader from "../components/MyLoader";
-import useAuthStore from "../store/useAuthStore";
-import { logout } from "../api/cloud/auth";
+import { Alert, Button, FlatList, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from "react-native";
+import MyLoader from "../../components/MyLoader";
+import useAuthStore from "../../store/useAuthStore";
+import { logout } from "../../api/cloud/auth";
 import { useMutation } from "@tanstack/react-query";
 
 export default function App() {
-  const [visible, setVisible] = React.useState(true);
   const { unsetUser, loggedUser } = useAuthStore();
-  const showLoader = (sec: number = 3000) => {
-    setVisible(true);
-    setTimeout(() => {
-      setVisible(false);
-    }, sec);
-  };
-  React.useEffect(() => {
-    showLoader();
-  }, []);
 
   const mutation = useMutation({
     mutationKey: ["auth"],
@@ -44,12 +34,24 @@ export default function App() {
     ]);
   };
 
+  const renderItem = ({ item }: any) => {
+    return (
+      <TouchableOpacity style={styles.card} onPress={item.action || undefined}>
+        <View style={{ padding: 16 }}>
+          <Text style={{ color: item.color }}>{item.key}</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
+  const DATA = [{ key: 'Account', color: '#0363FD' }, { key: 'Privacy', color: '#0363FD' }, { key: 'Logout', action: handleLogout, color: 'red' }]
+
   return (
     <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <Button title="Show loader" onPress={() => showLoader(6000)} />
-        <Button title="Logout" onPress={handleLogout} />
-      </View>
+      <FlatList
+        data={DATA}
+        renderItem={renderItem}
+      />
       <MyLoader visible={mutation.isPending} />
     </View>
   );
@@ -61,15 +63,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // paddingHorizontal: 16,
   },
-  buttonContainer: {
-    flexDirection: "row",
-    alignItems: "stretch",
-    marginTop: 10,
-    marginBottom: 30,
-    justifyContent: "space-between",
-  },
-  text: {
-    textAlign: "center",
-    marginBottom: 8,
-  },
+  card: {
+    padding: 12,
+    borderBottomWidth: 1,
+  }
 });

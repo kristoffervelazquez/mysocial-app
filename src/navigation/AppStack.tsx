@@ -6,7 +6,7 @@ import {
   StackActions,
   useNavigation,
 } from "@react-navigation/native";
-import SettingsScreen from "../screens/SettingsScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
 import QrGenerationScreen from "../screens/QrGenerationScreen";
