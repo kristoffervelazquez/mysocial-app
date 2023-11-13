@@ -10,7 +10,7 @@ const useForm = <T extends Object>(form: T) => {
     });
   };
 
-  return { ...state, formulario: state, onChange };
+  return { ...state, formData: state, onChange };
 };
 
 export default useForm;

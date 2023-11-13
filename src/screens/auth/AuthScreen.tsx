@@ -61,7 +61,7 @@ const AuthScreen = ({ navigation }: Props) => {
     mutation.mutate({ email, password });
   };
 
-  const { email, formulario, onChange, password } = useForm({
+  const { email, formData, onChange, password } = useForm({
     email: "",
     password: "",
   });
@@ -115,7 +115,7 @@ const AuthScreen = ({ navigation }: Props) => {
               <TouchableOpacity
                 onPress={handlePressLogin}
                 style={styles.button}
-                disabled={!formulario.email || !formulario.password}
+                disabled={!formData.email || !formData.password}
               >
                 <Text style={styles.buttonText}>Login</Text>
               </TouchableOpacity>

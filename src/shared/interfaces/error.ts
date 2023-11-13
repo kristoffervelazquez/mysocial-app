@@ -3,6 +3,7 @@ interface IError {
     data: {
       msg: string;
       error?: string;
+      message?: string;
     };
   };
 }

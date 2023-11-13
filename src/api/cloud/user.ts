@@ -10,6 +10,11 @@ interface EditUserData {
   username?: string;
   about: string;
 }
+interface IChangePassword {
+  currentPassword: string;
+  newPassword: string;
+  token: string;
+}
 
 const getUserData = async (userId: string, query?: string[]): Promise<User> => {
   let uri = `/user/${userId}`;
@@ -28,4 +33,15 @@ async function editUserData(data: EditUserData, token: string) {
   });
   return res.data;
 }
-export { getUserData, editUserData };
+async function changePasword(data: IChangePassword) {
+  const res = await API.put(`/user/changePassword`, {
+    currentPassword: data.currentPassword,
+    newPassword: data.newPassword
+  }, {
+    headers: {
+      'Authorization': `Bearer ${data.token}`
+    }
+  });
+  return res.data;
+}
+export { getUserData, editUserData, changePasword };

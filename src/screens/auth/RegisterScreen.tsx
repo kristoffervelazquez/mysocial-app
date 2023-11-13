@@ -24,7 +24,7 @@ const RegisterScreen = ({ navigation }: Props) => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const { formulario, onChange } = useForm({
+  const { formData, onChange } = useForm({
     name: "",
     lastName: "",
     username: "",
@@ -52,15 +52,15 @@ const RegisterScreen = ({ navigation }: Props) => {
 
   const handlePress = () => {
     if (
-      formulario.name === "" ||
-      formulario.lastName === "" ||
-      formulario.username === "" ||
-      formulario.email === "" ||
-      formulario.password === ""
+      formData.name === "" ||
+      formData.lastName === "" ||
+      formData.username === "" ||
+      formData.email === "" ||
+      formData.password === ""
     ) {
       return alert("Please fill all the fields");
     }
-    mutation.mutate(formulario);
+    mutation.mutate(formData);
   };
 
   const focusNextField = (nextFieldRef: any) => {
@@ -91,7 +91,7 @@ const RegisterScreen = ({ navigation }: Props) => {
                 placeholder="Name"
                 textContentType="name"
                 onSubmitEditing={() => focusNextField(lastNameRef)}
-                value={formulario.name}
+                value={formData.name}
                 onChangeText={(text) => onChange(text, "name")}
               />
               <TextInput
@@ -100,7 +100,7 @@ const RegisterScreen = ({ navigation }: Props) => {
                 textContentType="familyName"
                 ref={lastNameRef}
                 onSubmitEditing={() => focusNextField(usernameRef)}
-                value={formulario.lastName}
+                value={formData.lastName}
                 onChangeText={(text) => onChange(text, "lastName")}
               />
             </View>
@@ -110,7 +110,7 @@ const RegisterScreen = ({ navigation }: Props) => {
               textContentType="username"
               ref={usernameRef}
               onSubmitEditing={() => focusNextField(emailRef)}
-              value={formulario.username}
+              value={formData.username}
               onChangeText={(text) => onChange(text, "username")}
             />
             <TextInput
@@ -120,7 +120,7 @@ const RegisterScreen = ({ navigation }: Props) => {
               keyboardType="email-address"
               ref={emailRef}
               onSubmitEditing={() => focusNextField(passwordRef)}
-              value={formulario.email}
+              value={formData.email}
               onChangeText={(text) => onChange(text, "email")}
             />
             <TextInput
@@ -129,7 +129,7 @@ const RegisterScreen = ({ navigation }: Props) => {
               textContentType="password"
               secureTextEntry
               ref={passwordRef}
-              value={formulario.password}
+              value={formData.password}
               onChangeText={(text) => onChange(text, "password")}
             />
 

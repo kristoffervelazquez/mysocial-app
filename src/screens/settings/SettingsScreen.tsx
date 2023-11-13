@@ -4,8 +4,11 @@ import MyLoader from "../../components/MyLoader";
 import useAuthStore from "../../store/useAuthStore";
 import { logout } from "../../api/cloud/auth";
 import { useMutation } from "@tanstack/react-query";
+import { NativeStackScreenProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 
-export default function App() {
+
+type Props = NativeStackScreenProps<any, "SettingsScreen">;
+export default function SettingsScreen({ navigation, route }: Props) {
   const { unsetUser, loggedUser } = useAuthStore();
 
   const mutation = useMutation({
@@ -44,7 +47,7 @@ export default function App() {
     )
   }
 
-  const DATA = [{ key: 'Account', color: '#0363FD' }, { key: 'Privacy', color: '#0363FD' }, { key: 'Logout', action: handleLogout, color: 'red' }]
+  const DATA = [{ key: 'Account', color: '#0363FD', action: () => navigation.push('EditAccountScreen') }, { key: 'Privacy', color: '#0363FD' }, { key: 'Logout', action: handleLogout, color: 'red' }]
 
   return (
     <View style={styles.container}>
@@ -65,6 +68,10 @@ const styles = StyleSheet.create({
   },
   card: {
     padding: 12,
-    borderBottomWidth: 1,
+    backgroundColor: 'white',
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 8,
+    elevation: 4
   }
 });

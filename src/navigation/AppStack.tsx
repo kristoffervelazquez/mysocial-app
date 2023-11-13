@@ -17,6 +17,9 @@ import PublicProfileScreen from "../screens/PublicProfileScreen";
 import EditSocialScreen from "../screens/EditSocialScreen";
 import EditAboutMeScreen from "../screens/EditAboutMeScreen";
 import QrDropDownMenuButton from "../components/QrDropDownMenuButton";
+import EditAccountScreen from "../screens/settings/EditAccountScreen";
+import EditAccountInfoScreen from "../screens/settings/EditAccountInfoScreen";
+import EditPasswordScreen from "../screens/settings/EditPasswordScreen";
 
 interface ButtonProps {
   navigation: NavigationProp<any>;
@@ -46,7 +49,7 @@ const AppStack = () => {
         }}
       />
       <Stack.Screen name="EditSocialScreen" component={EditSocialScreen} />
-      <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+      <Stack.Screen name="SettingsScreen" options={{ headerTitle: 'Settings' }} component={SettingsScreen} />
       <Stack.Screen
         name="QrScanner"
         options={{ headerTitle: "Read QR" }}
@@ -67,6 +70,22 @@ const AppStack = () => {
         options={{ headerTitle: "Edit About Me" }}
         component={EditAboutMeScreen}
       />
+      <Stack.Screen
+        name="EditAccountScreen"
+        options={{ headerTitle: "Account" }}
+        component={EditAccountScreen}
+      />
+      <Stack.Screen
+        name="EditAccountInfoScreen"
+        options={{ headerTitle: "Account Information" }}
+        component={EditAccountInfoScreen}
+      />
+      <Stack.Screen
+        name="EditPasswordScreen"
+        options={{ headerTitle: "Change password" }}
+        component={EditPasswordScreen}
+      />
+
     </Stack.Navigator>
   );
 };
